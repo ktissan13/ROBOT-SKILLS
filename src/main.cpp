@@ -199,6 +199,11 @@ Motor Tray(18,MOTOR_GEARSET_36, false, MOTOR_ENCODER_DEGREES);
    slant = s;
  }
 
+ void slant_drive(int distance,int s){
+   drive(distance);
+   setSlant(s);
+ }
+
  void setCurrent(int mA){
    Chasis_L1.set_current_limit(mA);
    Chasis_L2.set_current_limit(mA);
@@ -300,21 +305,11 @@ Motor Tray(18,MOTOR_GEARSET_36, false, MOTOR_ENCODER_DEGREES);
 
 //*********************************LCD SCREEN
 
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
-}
-
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+	pros::lcd::set_text(1, "Super Sayin");
+  pros::lcd::set_text(2, "Yeah, I watch anime! - Tissan");
 
-	pros::lcd::register_btn1_cb(on_center_button);
 }
 
 //*********************************AUTON FUNCTIONS
