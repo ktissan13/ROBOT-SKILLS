@@ -298,7 +298,7 @@ Motor Tray(18,MOTOR_GEARSET_36, false, MOTOR_ENCODER_DEGREES);
      }
  }
 
-//*********************************LCD SCREEN 
+//*********************************LCD SCREEN
 
 void on_center_button() {
 	static bool pressed = false;
@@ -358,6 +358,17 @@ void move_lift(int distance, int vel){
       break;
 }}}
 
+void non_slew_drive(int distance, int vel){
+  _driveReset();
+  while(Chasis_R1.get_position() != distance){
+    Chasis_left(vel);
+    Chasis_right(vel);
+    if(Chasis_R1.get_position() >= (distance-5) && Chasis_R1.get_position() <= (distance+5)){
+      break;
+    }
+  }
+}
+
 void deploy(int distance, int vel){
   reset_motors();
   move_tray(240,100);
@@ -369,10 +380,13 @@ void deploy(int distance, int vel){
 
 void super_sayin(){
   deploy(600,60);
+  // Intake 4 cubes
   intake(600);
   drive(2.5 TL);
+  // Cube in the middle of the pole
   turn(-45);
   drive(0.5 TL);
+  // Stack in the platform
   drive(-.5 TL);
   turn(90);
   drive(3 TL);
