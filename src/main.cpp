@@ -376,7 +376,7 @@ void deploy(int distance, int vel){
 void super_sayin(){
   deploy(600,60);
   // Intake 4 cubes
-  intake(600);
+  //intake(600);
   drive(2.5 TL);
   // Cube in the middle of the pole
   turn(-45);
