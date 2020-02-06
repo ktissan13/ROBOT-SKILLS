@@ -419,11 +419,15 @@ void deploy(int distance, int vel){
 }
 
 void super_sayin(){
+  // Deploy
   deploy(600,60);
   trayAsync(30,70);
   turn(90);
   liftAsync(-600,100);
   non_slew_drive(-100, -100);
+  intake(600);
+
+  //Collect Cubes
 }
 
 void disabled() {}
