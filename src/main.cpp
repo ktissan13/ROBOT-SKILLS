@@ -15,6 +15,12 @@ Motor Tray(18,MOTOR_GEARSET_36, false, MOTOR_ENCODER_DEGREES);
  static int driveMode = 1;
  static int driveTarget = 0;
  static int turnTarget = 0;
+ static int trayTarget = 0;
+ static int tray_distance = 0;
+ static int tray_speed = 0;
+ static int liftTarget = 0;
+ static int lift_distance = 0;
+ static int lift_speed = 0;
  static int maxSpeed = MAX;
  static int slant = 0;
 
@@ -345,6 +351,26 @@ void move_tray(int distance, int vel){
       break;
 }}}
 
+void trayAsync(int distance,int vel){
+  tray_distance = distance;
+  tray_speed = vel;
+  trayTarget = 1;
+}
+
+void trayTask(void* parameter){
+  while(auton_mode){
+    delay(20);
+
+    switch(trayTarget){
+      case 1:
+      move_tray(tray_distance, tray_speed);
+      break;
+    }
+
+    trayTarget = 0;
+  }
+}
+
 void move_lift(int distance, int vel){
   Lift.tare_position();
   while(Lift.get_position() != distance){
@@ -352,6 +378,25 @@ void move_lift(int distance, int vel){
     if (Lift.get_position() >= (distance-5) && Lift.get_position() <= (distance+5)){
       break;
 }}}
+
+void liftAsync(int distance, int vel){
+  lift_distance = distance;
+  lift_speed = vel;
+  liftTarget = 1;
+}
+
+void liftTask(void* parameter){
+  while(auton_mode){
+    delay(20);
+
+    switch(liftTarget){
+      case 1:
+      move_lift(lift_distance,lift_speed);
+      break;
+    }
+    liftTarget = 0;
+    }
+  }
 
 void non_slew_drive(int distance, int vel){
   _driveReset();
@@ -375,18 +420,10 @@ void deploy(int distance, int vel){
 
 void super_sayin(){
   deploy(600,60);
-  // Intake 4 cubes
-  //intake(600);
-  drive(2.5 TL);
-  // Cube in the middle of the pole
-  turn(-45);
-  drive(0.5 TL);
-  // Stack in the platform
-  drive(-.5 TL);
+  trayAsync(30,70);
   turn(90);
-  drive(3 TL);
-  move_intake(-1000, 600);
-  move_tray(800,600);
+  liftAsync(-600,100);
+  non_slew_drive(-100, -100);
 }
 
 void disabled() {}
@@ -400,11 +437,15 @@ _driveReset(); // reset the drive encoders
 reset_motors();
 Task drive_task(driveTask);
 Task turn_task(turnTask);
+Task tray_task(trayTask);
+Task lift_task(liftTask);
 
 super_sayin();
 
 drive_task.remove();
 turn_task.remove();
+tray_task.remove();
+lift_task.remove();
 }
 
 //*********************************DRIVER MODE
