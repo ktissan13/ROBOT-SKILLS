@@ -427,7 +427,20 @@ void super_sayin(){
   non_slew_drive(-100, -100);
   intake(600);
 
-  //Collect Cubes
+  //Collect first set of Cubes
+  drive(3 TL);
+  intake(0);
+  non_slew_drive(-100, -100);
+  turn(-45);
+  drive(1 TL);
+  move_intake(-100,100);
+  move_tray(240,100);
+  drive(-1 TL);
+  turn(-45);
+  non_slew_drive(-100, -100);
+
+
+
 }
 
 void disabled() {}
