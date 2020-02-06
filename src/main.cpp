@@ -404,6 +404,8 @@ void non_slew_drive(int distance, int vel){
     Chasis_left(vel);
     Chasis_right(vel);
     if(Chasis_R1.get_position() >= (distance-5) && Chasis_R1.get_position() <= (distance+5)){
+      Chasis_left(0);
+      Chasis_right(0);
       break;
     }
   }
@@ -420,17 +422,21 @@ void deploy(int distance, int vel){
 
 void super_sayin(){
   // Deploy
-  deploy(600,60);
-  trayAsync(30,70);
-  turn(90);
-  liftAsync(-600,100);
-  non_slew_drive(-100, -100);
+  //deploy(400,60);
+  //trayAsync(30,70);
+/*  drive(0.3 TL);
+  turn(69);
+  drive(0.4 TL);
+  turn(-69);
+  //liftAsync(-400,100);
+  non_slew_drive(-0.45 TL, -80);*/
   intake(600);
 
   //Collect first set of Cubes
-  drive(3 TL);
+//  non_slew_drive(2 TL);
+
   intake(0);
-  non_slew_drive(-100, -100);
+  /*non_slew_drive(-100, -100);
   turn(-45);
   drive(1 TL);
   move_intake(-100,100);
@@ -438,6 +444,29 @@ void super_sayin(){
   drive(-1 TL);
   turn(-45);
   non_slew_drive(-100, -100);
+
+*/
+
+}
+
+void auton1(){
+    /*drive(0.3 TL);
+    turn(69);
+    drive(0.4 TL);
+    turn(-69);
+    //liftAsync(-400,100);
+    non_slew_drive(-0.4 TL, -80);*/
+    intake(600);
+    slowDrive(1.75 TL);
+    delay(100);
+    intake(0);
+
+    drive(-1.35 TL);
+    turn(70);
+    move_intake(260,600);
+    drive(0.2 TL);
+    move_tray(480, 100);
+    drive(-2 TL);
 
 
 
@@ -457,7 +486,7 @@ Task turn_task(turnTask);
 Task tray_task(trayTask);
 Task lift_task(liftTask);
 
-super_sayin();
+auton1();
 
 drive_task.remove();
 turn_task.remove();
