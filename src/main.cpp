@@ -558,10 +558,37 @@ void Eight_Point_Auton(){
   turn(-80);
       _driveReset();
     drive(.5 TL);
+}
 
+void Eight_Point_Auton_blue(){
+    // Starts Intake
+     intake(200);
+    // Get the cubes
+    slowDrive(1.38 TL);
+    pros::delay(750);
+      intake(0);
 
-
-
+    turn(-38);
+  //
+   drive(-1.25 TL);
+   pros::delay(20);
+   turn(41);
+  pros::delay(500);
+  intake(190);
+  _driveReset();
+  pros::delay(500);
+  slowDrive(1.3 TL);
+  intake(40);
+    _driveReset();
+    drive(-0.8 TL);
+  turn(128);
+  turn(-10);
+      _driveReset();
+    drive(.7 TL);
+    intake(0);
+    move_tray(third_position, 50);
+    drive(0.5 TL);
+    drive(-1 TL);
 
 }
 
@@ -581,7 +608,7 @@ Task turn_task(turnTask);
 Task tray_task(trayTask);
 Task lift_task(liftTask);
 
-Eight_Point_Auton();
+Eight_Point_Auton_blue();
 
 drive_task.remove();
 turn_task.remove();
