@@ -22,6 +22,9 @@ Motor Tray(18,MOTOR_GEARSET_36, false, MOTOR_ENCODER_DEGREES);
  static int liftTarget = 0;
  static int lift_distance = 0;
  static int lift_speed = 0;
+ static int intakeTarget = 0;
+ static int intake_distance = 0;
+ static int intake_speed = 0;
  static int maxSpeed = MAX;
  static int slant = 0;
 
@@ -71,10 +74,10 @@ Motor Tray(18,MOTOR_GEARSET_36, false, MOTOR_ENCODER_DEGREES);
    maxSpeed = speed;
  }
 
- //*********************************SLEW CONTROL
+ //*********************************SLEW RATE CONTROL
  // 9 works fine if any other number does not work
  const int accel_step = 9;
- const int deccel_step = 256; // no decel slew
+ const int deccel_step = 256;
  static int leftSpeed = 0;
  static int rightSpeed = 0;
 
@@ -351,14 +354,35 @@ void move_intake(int distance, int vel){
     }
   }
 }
+void intakeTask(void* parameter){
+  while(true){
+    if (auton_mode){
+      delay(20);
 
+      switch(intakeTarget){
+        case 1:
+        move_intake(intake_distance, intake_speed);
+        break;
+      }
+      intakeTarget = 0;
+    }
+  }
+}
+
+void intakeAsync(int distance, int vel){
+  intake_distance = distance;
+  intake_speed = vel;
+  intakeTarget = 1;
+}
 void move_tray(int distance, int vel){
   Tray.tare_position();
   while(Tray.get_position() != distance){
     Tray.move_absolute(distance, vel);
     if (Tray.get_position() >= (distance-5) && Tray.get_position() <= (distance+5)){
       break;
-}}}
+  }
+}
+}
 
 void trayAsync(int distance,int vel){
   tray_distance = distance;
@@ -499,39 +523,28 @@ void non_slew_drive(int distance, int vel){
 
 void deploy(int distance, int vel){
   reset_motors();
-  move_tray(240,100);
-  Tray.move_velocity(4);
+  trayAsync(240, 100);
   move_lift(distance,vel);
-  Lift.move_velocity(0);
-  Tray.move_voltage(0);
+  move_lift(-1*distance, 200);
+  trayAsync(-240, 200);
 }
 
 void super_sayin(){
-  // Deploy
-  //deploy(400,60);
-  //trayAsync(30,70);
-/*  drive(0.3 TL);
-  turn(69);
-  drive(0.4 TL);
-  turn(-69);
-  //liftAsync(-400,100);
-  non_slew_drive(-0.45 TL, -80);*/
-  intake(600);
 
-  //Collect first set of Cubes
-//  non_slew_drive(2 TL);
-
+  drive(-0.5 TL);
+  turn(140);
+  turn(-1);
+  drive(1.5 TL);
+  intake(200);
+  delay(20);
   intake(0);
-  /*non_slew_drive(-100, -100);
-  turn(-45);
-  drive(1 TL);
-  move_intake(-100,100);
-  move_tray(240,100);
-  drive(-1 TL);
-  turn(-45);
-  non_slew_drive(-100, -100);
+  drive(-0.3 TL);
+  move_tray(200, 200);
+  move_lift(500, 200);
+  drive(0.4 TL);
+  move_intake(400, 200);
 
-*/
+
 }
 
 void Eight_Point_Auton(){
@@ -561,35 +574,31 @@ void Eight_Point_Auton(){
 }
 
 void Eight_Point_Auton_blue(){
-    // Starts Intake
+    deploy(520,100);
+     // Starts Intake
      intake(200);
-    // Get the cubes
-    slowDrive(1.38 TL);
-    pros::delay(750);
-      intake(0);
-
-    turn(-38);
-  //
-   drive(-1.25 TL);
-   pros::delay(20);
-   turn(41);
-  pros::delay(500);
-  intake(190);
-  _driveReset();
-  pros::delay(500);
-  slowDrive(1.3 TL);
-  intake(40);
-    _driveReset();
-    drive(-0.8 TL);
-  turn(128);
-  turn(-10);
-      _driveReset();
-    drive(.7 TL);
-    intake(0);
-    move_tray(third_position, 50);
-    drive(0.5 TL);
-    drive(-1 TL);
-
+     // Get the cubes
+     slowDrive(1.2 TL);
+     intake(0);
+     turn(45);
+     drive(-1.2 TL);
+     turn(-44);
+     intake(200);
+     _driveReset();
+     delay(100);
+     slowDrive(1.45 TL);
+     /*intake(19);
+     _driveReset();
+     drive(-1.0 TL);
+     _driveReset();
+     turn(-160);
+     _driveReset();
+     turn(20);
+     _driveReset();
+     drive(1.5 TL);
+     intake(0);
+     move_tray(560,70);
+     drive(-1 TL);*/
 }
 
 void disabled() {}
@@ -599,14 +608,14 @@ void competition_initialize() {}
 void autonomous() {
 auton_mode = true;
 //red is false and blue is true
-mirror = false;
+mirror = true;
 _driveReset(); // reset the drive encoders
 reset_motors();
-
 Task drive_task(driveTask);
 Task turn_task(turnTask);
 Task tray_task(trayTask);
 Task lift_task(liftTask);
+Task intake_task(intakeTask);
 
 Eight_Point_Auton_blue();
 
@@ -614,7 +623,7 @@ drive_task.remove();
 turn_task.remove();
 tray_task.remove();
 lift_task.remove();
-
+intake_task.remove();
 }
 void drivecontrol(){
   Chasis_L1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
