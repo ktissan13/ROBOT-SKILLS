@@ -1,13 +1,15 @@
 #include "main.h"
 
-
+//*********************************MOTOR SETUP
 Motor Intake_R(1,MOTOR_GEARSET_18,true, MOTOR_ENCODER_DEGREES);
 Motor Intake_L(12,MOTOR_GEARSET_18,false, MOTOR_ENCODER_DEGREES);
 
+//*********************************STATIC VARIABLES
 static int intakeTarget = 0;
 static int intake_distance = 0;
 static int intake_speed = 0;
 
+//*********************************AUTONMOUSE FUNCTIONS
 void intake(int vel){
   Intake_L.move_velocity(vel);
   Intake_R.move_velocity(vel);
@@ -29,6 +31,8 @@ void move_intake(int distance, int vel){
     }
   }
 }
+
+//*********************************AUTON TASK
 void intakeTask(void* parameter){
   while(true){
     if (auton_mode){
@@ -50,6 +54,7 @@ void intakeAsync(int distance, int vel){
   intakeTarget = 1;
 }
 
+//*********************************DRIVER TASK
 void intakemove(){
 if(partner.get_digital(DIGITAL_R1) == 1){
   intake(200);

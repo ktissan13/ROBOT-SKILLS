@@ -1,5 +1,7 @@
 #include "main.h"
 
+//*********************************SKILLS CODE
+//*********************************ENABLE SKILLS IN AUTNOMOUS 
 void super_sayin(){
 
   drive(-0.5 TL);

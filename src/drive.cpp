@@ -7,6 +7,7 @@ Motor Chasis_L2 (20, MOTOR_GEARSET_18, false, MOTOR_ENCODER_DEGREES);
 Motor Chasis_R1 (7, MOTOR_GEARSET_18, true, MOTOR_ENCODER_DEGREES);
 Motor Chasis_R2 (9, MOTOR_GEARSET_18, true, MOTOR_ENCODER_DEGREES);
 
+//*********************************STATIC VARIABLES
 static int driveMode = 1;
 static int driveTarget = 0;
 static int turnTarget = 0;
@@ -315,6 +316,7 @@ void turnTask(void* parameter){
   }
 }
 
+//*********************************DRIVER TASK
 void drivecontrol(){
 Chasis_L1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 Chasis_L2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);

@@ -1,5 +1,6 @@
 #include "main.h"
 
+//*********************************MOTOR SETUP
 Motor Tray(18,MOTOR_GEARSET_36, false, MOTOR_ENCODER_DEGREES);
 
 //*********************************CONSTANT VARIABLES
@@ -11,6 +12,7 @@ static int first_position = 270;
 static int second_position=400;
 static int third_position=700;
 
+//*********************************AUTONMOUS FUNCTIONS
 void tray_reset(){
   Tray.tare_position();
 }
@@ -24,6 +26,8 @@ void move_tray(int distance, int vel){
   }
 }
 }
+
+//*********************************AUTONMOUS TASK
 
 void trayAsync(int distance,int vel){
   tray_distance = distance;
@@ -58,6 +62,8 @@ void tray(int distance, int vel)
     }
   }
 }
+
+//*********************************DRIVER TASK
 
 void traymove(){
  Tray.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
