@@ -10,8 +10,11 @@
 
 #include "api.h"
 #include "drive.hpp"
+#include "intake.hpp"
+#include "lift.hpp"
 #include "macro.hpp"
 #include "skills.hpp"
+#include "tray.hpp"
 
 /**
  * You should add more #includes here
@@ -37,8 +40,10 @@ using namespace pros::literals;
  * button press in opcontrol() for testing purposes).
  */
 
-bool auton_mode;
-bool mirror;
+extern Controller master;
+extern Controller partner;
+extern bool auton_mode;
+extern bool mirror;
 #ifdef __cplusplus
 extern "C" {
 #endif
