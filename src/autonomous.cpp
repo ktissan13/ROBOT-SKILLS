@@ -55,9 +55,32 @@ void Eight_Point_Auton_blue(){
      drive(-1 TL);*/
 }
 
+void fourpt_auton(){
+   deploy(520,100);
+
+   intake(200);
+  _driveReset();
+  delay(100);
+  slowDrive(1.65 TL);
+   intake(0);
+   _driveReset();
+   drive(-.5 TL);
+   _driveReset();
+   turn(-160);
+   _driveReset();
+   turn(40);
+  _driveReset();
+
+   slowDrive(1.0 TL);
+
+ intake(0);
+   move_tray(580,50);
+   drive(-1 TL);
+}
+
 //*********************************AUTONMOUS MODE
 void autonomous() {
-auton_mode = true;
+auton_mode = false;
 //red is false and blue is true
 mirror = true;
 _driveReset(); // reset the drive encoders
@@ -68,7 +91,7 @@ Task tray_task(trayTask);
 Task lift_task(liftTask);
 Task intake_task(intakeTask);
 
-Eight_Point_Auton_blue();
+fourpt_auton();
 
 drive_task.remove();
 turn_task.remove();
