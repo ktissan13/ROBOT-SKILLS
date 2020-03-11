@@ -9,8 +9,8 @@ void reset_motors(){
 
 void deploy(int distance, int vel){
   reset_motors();
-  trayAsync(240, 100);
+  move_tray(240, 200);
   move_lift(distance,vel);
-  move_lift(-1*distance, 200);
+  move_lift(-1*(distance-5), 200);
   trayAsync(-240, 200);
 }
